@@ -1,0 +1,74 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h1 class="text-4xl font-bold py-6">Login to Gambler</h1>
+    <div class="input-container">
+        <label for="username">Username:</label>
+        <input id="username" formControlName="username" />
+    </div>
+    <div
+        *ngIf="
+            loginForm.get('username')?.invalid &&
+            loginForm.get('username')?.touched
+        "
+    >
+        <small *ngIf="loginForm.get('username')?.errors?.['required']"
+            >Username is required.</small
+        >
+        <small *ngIf="loginForm.get('username')?.errors?.['minlength']"
+            >Username must be at least 3 characters long.</small
+        >
+        <small *ngIf="loginForm.get('username')?.errors?.['maxlength']"
+            >Username must not exceed 20 characters.</small
+        >
+        <small *ngIf="loginForm.get('username')?.errors?.['pattern']"
+            >Username must be alphanumeric.</small
+        >
+    </div>
+    <div class="input-container">
+        <label for="password">Password:</label>
+        <input id="password" formControlName="password" type="password" />
+    </div>
+    <div
+        *ngIf="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+        "
+    >
+        <small *ngIf="loginForm.get('password')?.errors?.['required']"
+            >Password is required.</small
+        >
+        <small *ngIf="loginForm.get('password')?.errors?.['minlength']"
+            >Password must be at least 8 characters long.</small
+        >
+        <small
+            *ngIf="
+                loginForm.get('password')?.errors?.['pattern'] &&
+                loginForm.get('password')?.hasError('pattern', ['ascii'])
+            "
+            >Password must contain only ASCII characters.</small
+        >
+        <small
+            *ngIf="
+                loginForm.get('password')?.errors?.['pattern'] &&
+                loginForm.get('password')?.hasError('pattern', ['colon'])
+            "
+            >Password must not contain the ':' character.</small
+        >
+        <small
+            *ngIf="
+                loginForm.get('password')?.errors?.['valid'] &&
+                loginForm.get('password')?.hasError('valid')
+            "
+            >The username or password is invalid!</small
+        >
+    </div>
+    <button
+        class="bg-gray-700 px-4 py-1 rounded-lg font-bold disabled:opacity-50"
+        type="submit"
+        [disabled]="loginForm.invalid"
+    >
+        Submit
+    </button>
+    <a class="my-4" href="/register"
+        >Doesn't have an account yet? Create now!</a
+    >
+</form>

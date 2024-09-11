@@ -1,0 +1,114 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <h1 class="text-4xl font-bold py-6">Register to Gambler</h1>
+
+    <!-- Username Field -->
+    <div class="input-container">
+        <label for="username">Username:</label>
+        <input id="username" formControlName="username" />
+    </div>
+    <div
+        *ngIf="
+            registerForm.get('username')?.invalid &&
+            registerForm.get('username')?.touched
+        "
+    >
+        <small *ngIf="registerForm.get('username')?.errors?.['required']"
+            >Username is required.</small
+        >
+        <small *ngIf="registerForm.get('username')?.errors?.['minlength']"
+            >Username must be at least 3 characters long.</small
+        >
+        <small *ngIf="registerForm.get('username')?.errors?.['maxlength']"
+            >Username must not exceed 20 characters.</small
+        >
+        <small *ngIf="registerForm.get('username')?.errors?.['pattern']"
+            >Username must be alphanumeric.</small
+        >
+    </div>
+
+    <!-- Password Field -->
+    <div class="input-container">
+        <label for="password">Password:</label>
+        <input id="password" formControlName="password" type="password" />
+    </div>
+    <div
+        *ngIf="
+            registerForm.get('password')?.invalid &&
+            registerForm.get('password')?.touched
+        "
+    >
+        <small *ngIf="registerForm.get('password')?.errors?.['required']"
+            >Password is required.</small
+        >
+        <small *ngIf="registerForm.get('password')?.errors?.['minlength']"
+            >Password must be at least 8 characters long.</small
+        >
+        <small
+            *ngIf="
+                registerForm.get('password')?.errors?.['pattern'] &&
+                registerForm.get('password')?.hasError('pattern', ['ascii'])
+            "
+            >Password must contain only ASCII characters.</small
+        >
+        <small
+            *ngIf="
+                registerForm.get('password')?.errors?.['pattern'] &&
+                registerForm.get('password')?.hasError('pattern', ['excludes'])
+            "
+            >Password must not contain the ':' character.</small
+        >
+    </div>
+
+    <!-- Email Field -->
+    <div class="input-container">
+        <label for="email">Email:</label>
+        <input id="email" formControlName="email" type="email" />
+    </div>
+    <div
+        *ngIf="
+            registerForm.get('email')?.invalid &&
+            registerForm.get('email')?.touched
+        "
+    >
+        <small *ngIf="registerForm.get('email')?.errors?.['required']"
+            >Email is required.</small
+        >
+        <small *ngIf="registerForm.get('email')?.errors?.['email']"
+            >Email must be valid.</small
+        >
+    </div>
+
+    <!-- Name Field -->
+    <div class="input-container">
+        <label for="name">Name:</label>
+        <input id="name" formControlName="name" />
+    </div>
+    <div
+        *ngIf="
+            registerForm.get('name')?.invalid &&
+            registerForm.get('name')?.touched
+        "
+    >
+        <small *ngIf="registerForm.get('name')?.errors?.['required']"
+            >Name is required.</small
+        >
+        <small *ngIf="registerForm.get('name')?.errors?.['minlength']"
+            >Name must be at least 3 characters long.</small
+        >
+        <small *ngIf="registerForm.get('name')?.errors?.['maxlength']"
+            >Name must not exceed 50 characters.</small
+        >
+        <small *ngIf="registerForm.get('name')?.errors?.['pattern']"
+            >Name must contain only ASCII characters.</small
+        >
+    </div>
+
+    <button
+        class="bg-gray-700 px-4 py-1 rounded-lg font-bold disabled:opacity-50"
+        type="submit"
+        [disabled]="registerForm.invalid"
+    >
+        Register
+    </button>
+    <a class="my-4" href="/login">Already have an account? Login!</a>
+</form>

@@ -1,0 +1,20 @@
+@layer form {
+    input {
+        @apply rounded-lg px-3 py-2 text-black font-bold bg-gray-700;
+    }
+    label {
+        @apply text-xl font-bold mr-2;
+    }
+    .input-container {
+        @apply flex items-center justify-between w-full my-1;
+    }
+    form {
+        @apply flex flex-col items-start justify-center;
+    }
+    button {
+        @apply bg-gray-700 disabled:bg-gray-400 text-white;
+    }
+    small {
+        @apply text-red-500 text-xl font-bold;
+    }
+}
