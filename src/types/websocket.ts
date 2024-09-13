@@ -1,5 +1,6 @@
 export enum WebSocketEvent {
   WS_CONNECTION = 0,
+  WS_CLOSE,
   WS_ERR,
   MESSAGE,
   BET_ACTION_BET,
@@ -9,4 +10,9 @@ export enum WebSocketEvent {
   BET_UPDATE,
   PING,
   PONG,
+}
+
+export interface WebSocketMessage {
+  event: number;
+  data: Uint8Array;
 }

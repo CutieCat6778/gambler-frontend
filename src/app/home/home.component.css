@@ -1,0 +1,5 @@
+@layer select {
+    select {
+        @apply text-black before:text-black;
+    }
+}

@@ -1,0 +1,120 @@
+<form [formGroup]="createBetForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="name">Bet Name:</label>
+        <input id="name" formControlName="name" type="text" />
+        <div
+            *ngIf="
+                createBetForm.get('name')?.invalid &&
+                createBetForm.get('name')?.touched
+            "
+        >
+            <small *ngIf="createBetForm.get('name')?.errors?.['required']"
+                >Bet name is required.</small
+            >
+            <small *ngIf="createBetForm.get('name')?.errors?.['minLength']"
+                >Bet name must be at least 3 characters.</small
+            >
+            <small *ngIf="createBetForm.get('name')?.errors?.['maxLength']"
+                >Bet name cannot be more than 50 characters.</small
+            >
+        </div>
+    </div>
+
+    <div>
+        <label for="description">Description:</label>
+        <textarea id="description" formControlName="description"></textarea>
+        <div
+            *ngIf="
+                createBetForm.get('description')?.invalid &&
+                createBetForm.get('description')?.touched
+            "
+        >
+            <small
+                *ngIf="createBetForm.get('description')?.errors?.['required']"
+                >Description is required.</small
+            >
+            <small
+                *ngIf="createBetForm.get('description')?.errors?.['minLength']"
+                >Description must be at least 3 characters.</small
+            >
+            <small
+                *ngIf="createBetForm.get('description')?.errors?.['maxLength']"
+                >Description cannot be more than 50 characters.</small
+            >
+        </div>
+    </div>
+
+    <div>
+        <label for="betOptions">Bet Options:</label>
+        <div formArrayName="betOptions">
+            <div
+                *ngFor="let optionControl of betOptions.controls; let i = index"
+            >
+                <input [formControlName]="i" placeholder="Option {{ i + 1 }}" />
+                <div *ngIf="optionControl.invalid && optionControl.touched">
+                    <small *ngIf="optionControl.errors?.['required']"
+                        >Bet option is required.</small
+                    >
+                    <small *ngIf="optionControl.errors?.['minLength']"
+                        >Bet option must be at least 2 characters.</small
+                    >
+                    <small *ngIf="optionControl.errors?.['maxLength']"
+                        >Bet option cannot be more than 50 characters.</small
+                    >
+                </div>
+            </div>
+        </div>
+        <button type="button" (click)="addOption()">Add Option</button>
+    </div>
+
+    <div>
+        <label for="inputBet">Initial Bet Amount:</label>
+        <input id="inputBet" formControlName="inputBet" type="number" />
+        <div
+            *ngIf="
+                createBetForm.get('inputBet')?.invalid &&
+                createBetForm.get('inputBet')?.touched
+            "
+        >
+            <small *ngIf="createBetForm.get('inputBet')?.errors?.['required']"
+                >Initial bet amount is required.</small
+            >
+            <small *ngIf="createBetForm.get('inputBet')?.errors?.['min']"
+                >Bet amount must be at least 1.</small
+            >
+        </div>
+    </div>
+
+    <div>
+        <label for="inputOption">Initial Bet Option:</label>
+        <input id="inputOption" formControlName="inputOption" type="text" />
+        <div
+            *ngIf="
+                createBetForm.get('inputOption')?.invalid &&
+                createBetForm.get('inputOption')?.touched
+            "
+        >
+            <small
+                *ngIf="createBetForm.get('inputOption')?.errors?.['required']"
+                >You must select an initial bet option.</small
+            >
+        </div>
+    </div>
+
+    <div>
+        <label for="endsAt">Ends At:</label>
+        <input id="endsAt" formControlName="endsAt" type="datetime-local" />
+        <div
+            *ngIf="
+                createBetForm.get('endsAt')?.invalid &&
+                createBetForm.get('endsAt')?.touched
+            "
+        >
+            <small *ngIf="createBetForm.get('endsAt')?.errors?.['required']"
+                >End date and time are required.</small
+            >
+        </div>
+    </div>
+
+    <button type="submit" [disabled]="createBetForm.invalid">Create Bet</button>
+</form>

@@ -6,13 +6,26 @@ export const authGuard: CanActivateFn = async (route, state) => {
   const authService = inject(AuthService);
   const router: Router = inject(Router);
 
-  if (!authService.dataLoaded) return false;
-
-  if (authService.authenticated) {
-    return true;
-  } else {
-    console.warn("User is not authenticated!");
+  if (!authService.dataLoaded) {
+    authService
+      .loadData()
+      .then(() => {
+        if (!authService.authenticated) {
+          console.log("User is not authenticated!");
+          router.navigate(["/login"]);
+          return false;
+        } else {
+          return true;
+        }
+      })
+      .catch((e) => {
+        router.navigate(["/login"]);
+        return false;
+      });
+  } else if (authService.dataLoaded && !authService.authenticated) {
     router.navigate(["/login"]);
     return false;
   }
+
+  return true;
 };

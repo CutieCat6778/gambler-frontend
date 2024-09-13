@@ -47,8 +47,8 @@ export class LoginComponent {
       this.apiService
         .login(username, password)
         .then((res) => {
-          this.authService.user = res.user;
-          this.authService.bets = res.bets;
+          this.authService.updateUser(res.user);
+          this.authService.updateAllBet(res.bets);
           this.router.navigate(["/home"]);
         })
         .catch((e) => {
