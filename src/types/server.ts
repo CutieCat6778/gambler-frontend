@@ -11,3 +11,12 @@ export interface LoginResponse {
   user: User;
   bets: Bet[];
 }
+
+export interface CreateBetRequest {
+  name: string;
+  description: string;
+  betOptions: string[];
+  inputBet: number;
+  inputOption: string;
+  endsAt: string;
+}

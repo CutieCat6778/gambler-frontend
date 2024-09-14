@@ -1,4 +1,9 @@
-<form [formGroup]="createBetForm" (ngSubmit)="onSubmit()">
+<form
+    [formGroup]="createBetForm"
+    (ngSubmit)="onSubmit()"
+    class="w-screen flex flex-col justify-center items-center"
+>
+    <a class="w-full text-center my-3" href="/home">Go to home</a>
     <div>
         <label for="name">Bet Name:</label>
         <input id="name" formControlName="name" type="text" />
@@ -45,12 +50,16 @@
     </div>
 
     <div>
-        <label for="betOptions">Bet Options:</label>
+        <label for="betOptions" class="mr-auto">Bet Options:</label>
         <div formArrayName="betOptions">
             <div
                 *ngFor="let optionControl of betOptions.controls; let i = index"
             >
-                <input [formControlName]="i" placeholder="Option {{ i + 1 }}" />
+                <input
+                    class="my-1"
+                    [formControlName]="i"
+                    placeholder="Option {{ i + 1 }}"
+                />
                 <div *ngIf="optionControl.invalid && optionControl.touched">
                     <small *ngIf="optionControl.errors?.['required']"
                         >Bet option is required.</small
@@ -87,7 +96,16 @@
 
     <div>
         <label for="inputOption">Initial Bet Option:</label>
-        <input id="inputOption" formControlName="inputOption" type="text" />
+        <select
+            class="bg-gray-700 px-2"
+            id="inputOption"
+            formControlName="inputOption"
+        >
+            <option value="" disabled selected>Select an option</option>
+            <option *ngFor="let option of betOptions.controls; let i = index">
+                {{ option.value }}
+            </option>
+        </select>
         <div
             *ngIf="
                 createBetForm.get('inputOption')?.invalid &&
@@ -102,7 +120,12 @@
     </div>
 
     <div>
-        <label for="endsAt">Ends At:</label>
+        <div class="flex flex-col">
+            <label for="endsAt">Ends At:</label>
+            <span class="text-gray-400 text-sm max-w-[70%]"
+                >This shows the UTC +0 timezone, not the german one</span
+            >
+        </div>
         <input id="endsAt" formControlName="endsAt" type="datetime-local" />
         <div
             *ngIf="
@@ -112,6 +135,18 @@
         >
             <small *ngIf="createBetForm.get('endsAt')?.errors?.['required']"
                 >End date and time are required.</small
+            >
+            <small *ngIf="createBetForm.get('endsAt')?.errors?.['invalidDate']"
+                >Date Format is invalid</small
+            >
+            <small *ngIf="createBetForm.get('endsAt')?.errors?.['pastDate']"
+                >Can't be used date in the past</small
+            >
+            <small *ngIf="createBetForm.get('endsAt')?.errors?.['minDate']"
+                >The distance must be at least 1 day!</small
+            >
+            <small *ngIf="createBetForm.get('endsAt')?.errors?.['maxDate']"
+                >Max bet's date is 14 days!</small
             >
         </div>
     </div>

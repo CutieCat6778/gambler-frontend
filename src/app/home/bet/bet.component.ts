@@ -18,4 +18,8 @@ export class BetComponent {
       console.log(msg);
     });
   }
+
+  ngOnInit() {
+    console.log(this.bet);
+  }
 }

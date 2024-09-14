@@ -1,8 +1,14 @@
 import { Injectable } from "@angular/core";
 import Axios, { AxiosInstance, AxiosResponse } from "axios";
 import env from "../lib/environment";
-import { LoginResponse, ServerResponse } from "../../types/server";
+import {
+  CreateBetRequest,
+  LoginResponse,
+  ServerResponse,
+} from "../../types/server";
 import { Bet } from "../../types/models";
+
+type NewType = CreateBetRequest;
 
 @Injectable({
   providedIn: "root",
@@ -73,6 +79,22 @@ export class ApiService {
   public async getBet(id: number): Promise<Bet | null> {
     return this.axios
       .get(`/bets/${id}`)
+      .then((res: AxiosResponse<ServerResponse<Bet>>) => {
+        const result = res.data;
+        if (result.code >= 300) {
+          return null;
+        }
+        return result.body;
+      })
+      .catch((e) => {
+        console.error(e.message);
+        return null;
+      });
+  }
+
+  public async createBet(bet: CreateBetRequest): Promise<Bet | null> {
+    return this.axios
+      .post("/bets/create", bet)
       .then((res: AxiosResponse<ServerResponse<Bet>>) => {
         const result = res.data;
         if (result.code >= 300) {

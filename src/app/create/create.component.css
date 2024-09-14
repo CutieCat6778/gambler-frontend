@@ -1,0 +1,40 @@
+@layer create {
+    input,
+    textarea {
+        @apply bg-gray-700 text-black rounded-lg;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    label {
+        @apply font-bold;
+    }
+
+    button {
+        @apply bg-gray-700 px-3 py-1 w-1/5 my-5;
+    }
+
+    small {
+        @apply text-red-500;
+    }
+
+    form > div {
+        @apply w-3/5 flex justify-between items-center my-2;
+    }
+
+    form > div > div {
+        @apply min-w-[20%];
+    }
+
+    select {
+        @apply bg-gray-700 text-black rounded-lg px-1;
+    }
+}
+
+input,
+textarea {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
