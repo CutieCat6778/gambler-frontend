@@ -1,1 +1,121 @@
-<h1>{{ bet.name }}</h1>
+<span class="my-2 text-sm text-neutral-300"
+    >{{ createdAt }} <span class="text-red-500 font-bold">{{ ">>" }}</span>
+    {{ endsAt }}</span
+>
+<div class="w-full flex justify-between items-center">
+    <div>
+        <div class="flex items-center">
+            <h2 class="text-2xl font-bold">{{ bet.name }}</h2>
+            <a href="/bet/{{ bet.ID }}" class="text-blue-500 inline ml-1">🔗</a>
+        </div>
+        <span class="text-md text-neutral-300">{{ bet.description }}</span>
+    </div>
+    <div>
+        <div>
+            <span class="mr-1">Total:</span
+            ><strong>{{ getTotalBetAmount() }} €</strong>
+        </div>
+        <div>
+            <span class="mr-1">Users:</span
+            ><strong>{{ bet.user_bets.length }}</strong>
+        </div>
+    </div>
+    <div>
+        <div>
+            <span class="mr-1">Receive:</span><strong>{{ multiplier }}x</strong>
+        </div>
+        <div>
+            <span class="mr-1">Amount:</span
+            ><strong
+                >{{
+                    multiplier * createBetForm.get("amount")?.value || 0
+                }}
+                €</strong
+            >
+        </div>
+    </div>
+</div>
+<div class="w-full flex justify-between items-start my-3 px-3" *ngIf="loaded">
+    <div>
+        <h3 class="text-neutral-200 font-semibold">Your bets</h3>
+        <div class="overflow-scroll max-h-20 w-max pr-3">
+            @for (myBet of myBets; track myBet.ID) {
+                <p>
+                    <span class="text-green-500 font-bold"
+                        >{{ myBet.amount }} €</span
+                    >
+                    on
+                    <strong>{{ myBet.bet_option }}</strong>
+                </p>
+            }
+        </div>
+    </div>
+    <form [formGroup]="createBetForm" (ngSubmit)="handleBet()">
+        <div class="flex items-start bg-red flex-col">
+            <div>
+                <input
+                    type="number"
+                    class="rounded-lg w-full my-1 px-2 bg-gray-800 text-white"
+                    formControlName="amount"
+                />
+                <div
+                    *ngIf="
+                        createBetForm.get('amount')?.invalid &&
+                        createBetForm.get('amount')?.touched
+                    "
+                >
+                    <small
+                        *ngIf="
+                            createBetForm.get('amount')?.errors?.['required']
+                        "
+                        >Bet amount is required.</small
+                    >
+                    <small *ngIf="createBetForm.get('amount')?.errors?.['min']"
+                        >Bet amount needs to be atleast 1 €</small
+                    >
+                    <small *ngIf="createBetForm.get('amount')?.errors?.['max']"
+                        >Your bet amount is over your balance</small
+                    >
+                </div>
+            </div>
+
+            <div class="w-full">
+                <select
+                    class="bg-gray-800 mb-1 px-2 w-full rounded-lg"
+                    id="options"
+                    formControlName="options"
+                >
+                    <option value="" disabled selected>Select an option</option>
+                    <option
+                        *ngFor="let option of bet.bet_options; let i = index"
+                        [value]="option"
+                    >
+                        {{ option }}
+                    </option>
+                </select>
+                <div
+                    *ngIf="
+                        createBetForm.get('option')?.invalid &&
+                        createBetForm.get('option')?.touched
+                    "
+                >
+                    <small
+                        *ngIf="
+                            createBetForm.get('option')?.errors?.['required']
+                        "
+                        >You must select an initial bet option.</small
+                    >
+                </div>
+            </div>
+            <div class="flex w-full justify-end">
+                <button
+                    class="bg-gray-800 font-bold px-3 rounded-lg disabled:bg-gray-900"
+                    type="submit"
+                    [disabled]="createBetForm.invalid"
+                >
+                    Place
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -26,6 +26,10 @@
         <h1>No bets</h1>
     </div>
     @for (bet of bets; track bet.name) {
-        <bet-component [bet]="bet"></bet-component>
+        <bet-component
+            [bet]="bet"
+            [user]="user"
+            class="w-1/2 p-4 bg-gray-700 my-5 rounded-lg shadow-lg shadow-gray-800 border-2 border-gray-800"
+        ></bet-component>
     }
 </div>

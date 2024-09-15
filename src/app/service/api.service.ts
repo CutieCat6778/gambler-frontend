@@ -40,6 +40,8 @@ export class ApiService {
         return result.body;
       })
       .catch((e) => {
+        alert(e);
+        console.error(e);
         return e;
       });
   }
@@ -105,6 +107,31 @@ export class ApiService {
       .catch((e) => {
         console.error(e.message);
         return null;
+      });
+  }
+
+  public async placeBet(
+    betID: number,
+    amount: number,
+    option: string,
+  ): Promise<boolean> {
+    console.log(amount, option);
+    return this.axios
+      .put(`/bets/place/${betID}`, {
+        betID,
+        amount,
+        option: option,
+      })
+      .then((res: AxiosResponse<ServerResponse<boolean>>) => {
+        const result = res.data;
+        if (result.code >= 300) {
+          return false;
+        }
+        return result.body;
+      })
+      .catch((e) => {
+        console.error(e.message);
+        return false;
       });
   }
 }

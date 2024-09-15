@@ -3,6 +3,7 @@ import { Router, RouterOutlet } from "@angular/router";
 import { AuthService } from "./service/auth.service";
 import { User } from "../types/models";
 import { CommonModule } from "@angular/common";
+import { WsService } from "./service/ws.service";
 
 @Component({
   selector: "app-root",

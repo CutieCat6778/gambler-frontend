@@ -31,56 +31,58 @@ export class WsService {
   }
 
   private connect(uuid: number) {
+    if (this.websocket != null) return;
     console.log("Connecting to websocket");
     this.websocket = new WebSocket(`${env.BASE_URL}/ws/${uuid}`);
 
-    this.websocket.binaryType = "blob";
+    this.websocket.binaryType = "arraybuffer";
 
     this.websocket.onopen = () => {
       console.log("Websocket connected");
     };
 
     this.websocket.onmessage = (event) => {
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(event.data);
-      reader.addEventListener("loadend", (e) => {
-        const data: Uint8Array = new Uint8Array(e.target?.result as any);
-        console.log(data);
-        if (data.length < 1) {
-          console.error("Invalid message");
-          return;
-        }
-        if (!this.isValidEvent(data[0])) {
-          console.error("Invalid event");
-          return;
-        }
-        if (data[1] != env.WS_VERSION) {
-          console.error("Invalid version");
-          return;
-        }
-        console.log("Recieved event", WebSocketEvent[data[0]]);
-        if (data[0] == WebSocketEvent.WS_CONNECTION) {
-          console.log("Server responded with OK");
-          return;
-        }
-        if (data[0] == WebSocketEvent.BET_UPDATE) {
-          this.updateBetEvent(
-            this._convertChunksToNumber(
-              new Array().concat(Array.from(data.slice(1))),
-            ),
-          );
-          return;
-        }
-        this.message.next({
-          event: data[0],
-          data: data.slice(1),
-        });
+      const data: Uint8Array = new Uint8Array(event.data);
+      console.log(data);
+      if (data.length < 1) {
+        console.error("Invalid message");
+        return;
+      }
+      if (!this.isValidEvent(data[0])) {
+        console.error("Invalid event");
+        return;
+      }
+      if (data[1] != env.WS_VERSION) {
+        console.error("Invalid version");
+        return;
+      }
+      console.log("Recieved event", WebSocketEvent[data[0]]);
+      if (data[0] == WebSocketEvent.WS_CONNECTION) {
+        console.log("Server responded with OK");
+        return;
+      }
+      if (data[0] == WebSocketEvent.BET_UPDATE) {
+        this.updateBetEvent(this._convertChunksToNumber(data.slice(1)));
+        return;
+      }
+      this.message.next({
+        event: data[0],
+        data: data.slice(2),
       });
     };
     this.websocket.onclose = () => {
       console.log("Websocket closed");
       this.message.complete();
     };
+  }
+
+  public send(event: WebSocketEvent, payload: Uint8Array) {
+    if (this.websocket == null) {
+      console.error("Websocket not connected");
+      return;
+    }
+    const data = new Uint8Array([event, env.WS_VERSION, ...payload]);
+    this.websocket.send(data);
   }
 
   private isValidEvent(eventID: number): boolean {
@@ -97,11 +99,12 @@ export class WsService {
     }
     const newBet = await this.apiService.getBet(betID);
     if (newBet) {
+      console.log(newBet);
       this.authService.updateBet(newBet);
     }
   }
 
-  private _convertChunksToNumber(chunks: number[]): number {
+  public _convertChunksToNumber(chunks: Uint8Array): number {
     let result = 0;
     for (const byte of chunks) {
       // Shift result left by 8 bits and add the current byte

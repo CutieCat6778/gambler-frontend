@@ -1,0 +1,5 @@
+@layer bet {
+    small {
+        @apply text-red-500;
+    }
+}

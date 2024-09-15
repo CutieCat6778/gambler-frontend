@@ -52,6 +52,15 @@ export class CreateComponent {
     });
   }
 
+  ngOnInit() {
+    window.addEventListener("beforeunload", (event) => {
+      const confirmMsg = "o/";
+      event.preventDefault();
+      event.returnValue = confirmMsg;
+      return confirmMsg;
+    });
+  }
+
   get betOptions(): FormArray {
     return this.createBetForm.get("betOptions") as FormArray;
   }

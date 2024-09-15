@@ -40,7 +40,7 @@ export interface Bet extends CustomModel {
 }
 
 export interface UserBet extends CustomModel {
-  user_id: number;
+  user: number;
   bet_id: number;
   amount: number;
   bet_option: string;
